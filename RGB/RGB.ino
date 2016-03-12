@@ -20,6 +20,11 @@ int conveyorPin = 6;
 int conveyorSpeed = 150;
 int conveyorStop = 1475;
 
+Servo dispenser;
+int dispenserPin = 10;
+int dispenserOpen = 130;
+int dispenserClose = 90;
+
 int inputPin = 7;
 int outputPin = 4;
 
@@ -33,6 +38,8 @@ void setup()
 	servo.attach(servoPin);
 	ball.attach(ballPin);
 	conveyor.attach(conveyorPin);
+	dispenser.attach(dispenserPin);
+	dispenser.write(dispenserClose);
 	pinMode(outputPin,INPUT);
 	pinMode(inputPin,INPUT);
 }
@@ -79,16 +86,17 @@ void intake()
 	//servo.write(servoOpen);
 	//comment below lines to keep;
 	if (false) {}
-	else if(checkColor() == "WHITE") {servo.write(servoClose); burst();} 
+//	else if(checkColor() == "WHITE") {servo.write(servoClose); burst();} 
 	//else if(checkColor() == "GREEN") {servo.write(servoClose); burst();}
-	//else if(checkColor() == "YELLOW") {servo.write(servoClose); burst();}
-	else if(checkColor() == "RED") {servo.write(servoClose); burst();}
+	else if(checkColor() == "YELLOW") {servo.write(servoClose); burst();}
+//	else if(checkColor() == "RED") {servo.write(servoClose); burst();}
 	else {servo.write(servoOpen); burst();};                             
 }
 void output()
 {
 	//Close servo
 	servo.write(servoClose);
+	dispenser.write(dispenserOpen);
 	//Reverse conveyor motor
 	conveyor.writeMicroseconds(conveyorStop + conveyorSpeed);
 	delay(100);
@@ -98,6 +106,7 @@ void halt()
 	//Stops motors
 	ball.writeMicroseconds(ballStop);
 	conveyor.writeMicroseconds(conveyorStop);
+	dispenser.write(dispenserClose);
 	delay(100);
 }
 bool hasColor() {
